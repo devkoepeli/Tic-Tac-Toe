@@ -1,7 +1,7 @@
 let fields = [
+    'circle',
     null,
-    null,
-    null,
+    'cross',
     null,
     null,
     null,
@@ -29,8 +29,11 @@ function render() {
             tableHTML += `<td id="table-cell${i * 3 + j}" onclick="addIcon(${i * 3 + j})">`;
             const fieldValue = fields[i * 3 + j]; // calculating each field to get the value out of the array
             // starting after each i iteration with 0, 3, 6
-            if (fieldValue) {
-                tableHTML += fieldValue;
+            if (fieldValue === 'circle') {
+                tableHTML += generateSVGCircle()
+            }
+            if (fieldValue === 'cross') {
+                tableHTML += generateSVGCross();
             }
             tableHTML += '</td>';
         }
@@ -50,11 +53,14 @@ function addIcon(index) {
 
 function generateSVGCircle() {
     return `
-        <div>
-            <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="25" cy="25" r="20" stroke="#01B9EF" stroke-width="8" fill="none" />
-            </svg>
-        </div>
+    <div>
+        <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="20" stroke="#01B9EF" stroke-width="8" fill="none">
+            <animate attributeName="r" from="0" to="20" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="stroke-opacity" from="0" to="1" dur="300ms" begin="0s" fill="freeze" />
+        </circle>
+        </svg>
+    </div>
     `;
 }
 
@@ -63,9 +69,19 @@ function generateSVGCross() {
     return `
     <div>
         <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
-            <line x1="5" y1="5" x2="45" y2="45" stroke="#FDC600" stroke-width="8" />
-            <line x1="5" y1="45" x2="45" y2="5" stroke="#FDC600" stroke-width="8" />
+            <line x1="25" y1="25" x2="25" y2="25" stroke="#FDC600" stroke-width="8">
+            <animate attributeName="x1" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="y1" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="x2" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="y2" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
+            </line>
+            <line x1="25" y1="25" x2="25" y2="25" stroke="#FDC600" stroke-width="8">
+            <animate attributeName="x1" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="y1" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="x2" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="y2" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
+            </line>
         </svg>
     </div>
-    `;
+  `;
 }
