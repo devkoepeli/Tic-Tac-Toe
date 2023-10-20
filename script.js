@@ -26,7 +26,7 @@ function render() {
         tableHTML += '<tr>';
         for (let j = 0; j < 3; j++) { // tabellenzelle
             tableHTML += '<td>';
-            const fieldValue = fields[i * 3 + j];
+            const fieldValue = fields[i * 3 + j]; // calculating each field to get the value out of the array
             if (fieldValue) {
                 tableHTML += fieldValue;
             }
