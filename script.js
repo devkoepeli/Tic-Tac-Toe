@@ -12,6 +12,7 @@ let fields = [
 
 
 let currentPlayer = 'circle'; // Startspieler (circle beginnt)
+let gameIsOver = false; // checking end of game
 
 
 document.addEventListener('DOMContentLoaded', init);
@@ -40,13 +41,61 @@ function render() {
 
 
 function addIcon(index) {
-    if (fields[index] === null) {
+    if (fields[index] === null && !gameIsOver) {
         fields[index] = currentPlayer;
         const cell = document.getElementById(`table-cell${index}`);
         cell.innerHTML = (currentPlayer === 'circle') ? generateCircleSVG() : generateCrossSVG();
-        cell.onclick = null; // remove the onclick-attribute, to prevent further clicks
-        currentPlayer = (currentPlayer === 'circle') ? 'cross' : 'circle'; // change the player with the ternary operator
+        cell.onclick = null;
+        currentPlayer = (currentPlayer === 'circle') ? 'cross' : 'circle';
+        checkGameStatus(); // Überprüfe das Spielende nach jedem Zug
     }
+}
+
+
+function checkGameStatus() {
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
+
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
+            gameIsOver = true;
+            if (gameIsOver) {
+                drawWinningLine(a, b, c);
+            }
+            return;
+        }
+    }
+
+    if (fields.every(field => field !== null)) {
+        gameIsOver = true;
+    }
+}
+
+
+function drawWinningLine(a, b, c) {
+    const container = document.getElementById('content');
+    const x1 = a % 3 * 100 + 50; // x-Koordinate des ersten Elements
+    const y1 = Math.floor(a / 3) * 100 + 50; // y-Koordinate des ersten Elements
+    const x2 = c % 3 * 100 + 50; // x-Koordinate des dritten Elements
+    const y2 = Math.floor(c / 3) * 100 + 50; // y-Koordinate des dritten Elements
+
+    const lineSVG = `
+        <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+            <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="white" stroke-width="5" />
+        </svg>
+    `;
+
+    const lineElement = document.createElement('div');
+    lineElement.innerHTML = lineSVG;
+    lineElement.style.position = 'absolute';
+    lineElement.style.top = '0';
+    lineElement.style.left = '0';
+    lineElement.style.right = '0';
+    container.appendChild(lineElement);
 }
 
 
@@ -55,8 +104,8 @@ function generateCircleSVG() {
     <div>
         <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
         <circle cx="25" cy="25" r="20" stroke="#01B9EF" stroke-width="8" fill="none">
-            <animate attributeName="r" from="0" to="20" dur="300ms" begin="0s" fill="freeze" />
-            <animate attributeName="stroke-opacity" from="0" to="1" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="r" from="0" to="20" dur="250ms" begin="0s" fill="freeze" />
+            <animate attributeName="stroke-opacity" from="0" to="1" dur="250ms" begin="0s" fill="freeze" />
         </circle>
         </svg>
     </div>
@@ -69,16 +118,16 @@ function generateCrossSVG() {
     <div>
         <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
             <line x1="25" y1="25" x2="25" y2="25" stroke="#FDC600" stroke-width="8">
-            <animate attributeName="x1" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
-            <animate attributeName="y1" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
-            <animate attributeName="x2" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
-            <animate attributeName="y2" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="x1" from="25" to="5" dur="250ms" begin="0s" fill="freeze" />
+            <animate attributeName="y1" from="25" to="5" dur="250ms" begin="0s" fill="freeze" />
+            <animate attributeName="x2" from="25" to="45" dur="250ms" begin="0s" fill="freeze" />
+            <animate attributeName="y2" from="25" to="45" dur="250ms" begin="0s" fill="freeze" />
             </line>
             <line x1="25" y1="25" x2="25" y2="25" stroke="#FDC600" stroke-width="8">
-            <animate attributeName="x1" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
-            <animate attributeName="y1" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
-            <animate attributeName="x2" from="25" to="45" dur="300ms" begin="0s" fill="freeze" />
-            <animate attributeName="y2" from="25" to="5" dur="300ms" begin="0s" fill="freeze" />
+            <animate attributeName="x1" from="25" to="5" dur="250ms" begin="0s" fill="freeze" />
+            <animate attributeName="y1" from="25" to="45" dur="250ms" begin="0s" fill="freeze" />
+            <animate attributeName="x2" from="25" to="45" dur="250ms" begin="0s" fill="freeze" />
+            <animate attributeName="y2" from="25" to="5" dur="250ms" begin="0s" fill="freeze" />
             </line>
         </svg>
     </div>
