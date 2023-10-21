@@ -1,7 +1,7 @@
 let fields = [
-    'circle',
     null,
-    'cross',
+    null,
+    null,
     null,
     null,
     null,
@@ -9,6 +9,9 @@ let fields = [
     null,
     null
 ]
+
+
+let currentPlayer = 'circle'; // Startspieler (circle beginnt)
 
 
 document.addEventListener('DOMContentLoaded', init);
@@ -26,17 +29,8 @@ function render() {
     for (let i = 0; i < 3; i++) { // tabellenzeile
         tableHTML += '<tr>';
         for (let j = 0; j < 3; j++) { // tabellenzelle
-            tableHTML += `<td id="table-cell${i * 3 + j}" onclick="addIcon(${i * 3 + j})">`;
-            const fieldValue = fields[i * 3 + j]; // calculating each field to get the value out of the array
-            // starting after each i iteration with 0, 3, 6
-            if (fieldValue === 'circle') {
-                tableHTML += generateSVGCircle()
-            }
-            if (fieldValue === 'cross') {
-                tableHTML += generateSVGCross();
-            }
-            tableHTML += '</td>';
-        }
+            tableHTML += `<td id="table-cell${i * 3 + j}" onclick="addIcon(${i * 3 + j})"></td>`;
+        } // calulating each field to get the value out of the array, starting after each i iteration with 0, 3, 6
         tableHTML += '</tr>';
     }
 
@@ -46,12 +40,17 @@ function render() {
 
 
 function addIcon(index) {
-    fields[index] = 'cross';
-    render();
+    if (fields[index] === null) {
+        fields[index] = currentPlayer;
+        const cell = document.getElementById(`table-cell${index}`);
+        cell.innerHTML = (currentPlayer === 'circle') ? generateCircleSVG() : generateCrossSVG();
+        cell.onclick = null; // remove the onclick-attribute, to prevent further clicks
+        currentPlayer = (currentPlayer === 'circle') ? 'cross' : 'circle'; // change the player with the ternary operator
+    }
 }
 
 
-function generateSVGCircle() {
+function generateCircleSVG() {
     return `
     <div>
         <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
@@ -65,7 +64,7 @@ function generateSVGCircle() {
 }
 
 
-function generateSVGCross() {
+function generateCrossSVG() {
     return `
     <div>
         <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">

@@ -17,10 +17,10 @@ body {
 }
 
 #content {
-    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: 110px;
 }
 
 h1 {
@@ -72,8 +72,5 @@ table tr td:last-child {
     align-items: center;
     justify-content: center;
     gap: 20px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 110px;
+    padding-top: 110px;
 }
