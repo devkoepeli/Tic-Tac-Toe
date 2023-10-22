@@ -95,6 +95,7 @@ function drawWinningLine(a, b, c) {
     const lineSVG = `
         <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
             <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="white" stroke-width="5" />
+            <animate attributeName="stroke-opacity" from="0" to="1" dur="250ms" begin="0s" fill="freeze" />
         </svg>
     `;
 
