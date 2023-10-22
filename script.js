@@ -45,23 +45,28 @@ function addIcon(index) {
         fields[index] = currentPlayer;
         const cell = document.getElementById(`table-cell${index}`);
         cell.innerHTML = (currentPlayer === 'circle') ? generateCircleSVG() : generateCrossSVG();
-        cell.onclick = null;
-        currentPlayer = (currentPlayer === 'circle') ? 'cross' : 'circle';
+        cell.onclick = null; // remove the onclick-attribute, to prevent further clicks
+        changePlayer();
         checkGameStatus(); // Überprüfe das Spielende nach jedem Zug
     }
 }
 
 
+function changePlayer() {
+    currentPlayer = (currentPlayer === 'circle') ? 'cross' : 'circle'; // ternary operator
+}
+
+
 function checkGameStatus() {
     const winningCombinations = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // horizontal
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // vertikal
+        [0, 4, 8], [2, 4, 6] // diagonal
     ];
 
     for (const combination of winningCombinations) {
-        const [a, b, c] = combination;
-        if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
+        const [a, b, c] = combination; // winninCombinations[0] -> [0, 1, 2] -> const [0, 1, 2]
+        if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) { // fields[0] = 'circle' stimmen die Werte überein?
             gameIsOver = true;
             if (gameIsOver) {
                 drawWinningLine(a, b, c);
@@ -69,7 +74,11 @@ function checkGameStatus() {
             return;
         }
     }
+    isGameFinished();
+}
 
+
+function isGameFinished() { // überprüfen ob jedes Feld ungleich null ist, gefüllt
     if (fields.every(field => field !== null)) {
         gameIsOver = true;
     }
