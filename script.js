@@ -25,6 +25,7 @@ function init() {
 
 function render() {
     const container = document.getElementById('content');
+    container.innerHTML = '';
     let tableHTML = '<table>';
 
     for (let i = 0; i < 3; i++) { // tabellenzeile
@@ -68,19 +69,19 @@ function checkGameStatus() {
         const [a, b, c] = combination; // winninCombinations[0] -> [0, 1, 2] -> const [0, 1, 2]
         if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) { // fields[0] = 'circle' stimmen die Werte überein?
             gameIsOver = true;
-            if (gameIsOver) {
-                drawWinningLine(a, b, c);
-            }
-            return;
+            drawWinningLine(a, b, c);
+            addRestartButton();
+            return; // exit function
         }
     }
-    isGameFinished();
+    isGameFinished(); // if no winningCombinations found
 }
 
 
 function isGameFinished() { // überprüfen ob jedes Feld ungleich null ist, gefüllt
     if (fields.every(field => field !== null)) {
         gameIsOver = true;
+        addRestartButton();
     }
 }
 
@@ -105,7 +106,30 @@ function drawWinningLine(a, b, c) {
     lineElement.style.top = '0';
     lineElement.style.left = '0';
     lineElement.style.right = '0';
+    lineElement.setAttribute('id', 'line');
     container.appendChild(lineElement);
+}
+
+
+function addRestartButton() {
+    let container = document.getElementById('content');
+    let button = document.createElement('button');
+
+    button.classList.add('restart-button');
+    button.innerHTML = 'Erneut spielen';
+    button.id = 'button';
+    container.appendChild(button);
+
+    button.onclick = restartGame;
+}
+
+
+function restartGame() {
+    for (let i = 0; i < fields.length; i++) {
+        const tableCells = document.querySelector(`#table-cell${i}`);
+        tableCells.innerHTML = '';
+    }
+    render();
 }
 
 
