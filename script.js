@@ -125,9 +125,9 @@ function addRestartButton() {
 
 
 function restartGame() {
-    for (let i = 0; i < fields.length; i++) {
-        const tableCells = document.querySelector(`#table-cell${i}`);
-        tableCells.innerHTML = '';
+    gameIsOver = false;
+    for (let i = 0; i < fields.length; i++) { // das array zurücksetzen
+        fields[i] = null;
     }
     render();
 }
