@@ -83,6 +83,7 @@ table tr td:last-child {
     margin-top: 48px;
     font-size: 18px;
     transition: all .1s ease-in-out;
+    color: black;
 }
 
 .restart-button:hover {
@@ -92,4 +93,11 @@ table tr td:last-child {
 
 .restart-button:active {
     transform: scale(1);
+}
+
+@media(max-width: 576px) {
+    #content {
+        margin-top: 80px;
+        position: relative;
+    }
 }
